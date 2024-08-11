@@ -1,0 +1,155 @@
+.homeoptions {
+    width: 100%;
+    height: 85vh;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.homeoptions h1 {
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.homeoptions span h3 {
+    color: grey;
+}
+
+.homeoptions-container {
+    width: 80%;
+    height: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.homeoptioncard {
+    width: 30%;
+    height: 100%;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 1rem;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.homeoptioncard:hover {
+    transform: scale(1.1);
+    transition: 0.3s ease-out;
+}
+
+.homeoption-1 {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.homeoption-1 img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.homeoption-2 {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.homeoption-2 h3 {
+    font-size: 1.2rem;
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.homeoption-2 p {
+    color: gray;
+}
+
+.homeoption-2 h2 {
+    font-weight: lighter;
+}
+
+.homeoptions-button {
+    cursor: pointer;
+    width: 10rem;
+    height: 3rem;
+    font-size: 1rem;
+    border: none;
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.homeoptions-button:hover {
+    transform: scale(1.1);
+    transition: 0.3s ease-out;
+}
+
+@media screen and (max-width: 600px) {
+    .homeoptions {
+        height: 45vh;
+    }
+
+    .homeoptions h1 {
+        font-size: 1.3rem;
+    }
+
+    .homeoptions span h3 {
+        font-size: 0.8rem;
+    }
+
+    .homeoptions-container {
+        width: 95%;
+        height: 60%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    .homeoptioncard {
+        width: 30%;
+        height: 70%;
+        margin: 0.5rem;
+    }
+
+    .homeoption-1 {
+        width: 80%;
+        height: 50%;
+    }
+
+    .homeoption-2 h3 {
+        font-size: 0.5rem;
+    }
+
+    .homeoption-2 p {
+        font-size: 0.5rem;
+    }
+
+    .homeoption-2 h2 {
+        font-size: 0.5rem;
+    }
+
+    .homeoptions-button {
+        width: 5rem;
+        height: 1rem;
+        font-size: 0.5rem;
+        transform: translateY(-1rem);
+    }
+
+
+}
