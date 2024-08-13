@@ -15,7 +15,7 @@
                             <h3>Sophia Anseri</h3>
                             <p>Student</p>
                         </div>
-                        <button>5.0★</button>
+                        <button>0.0★</button>
                     </div>
 
                 </div>
