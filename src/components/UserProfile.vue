@@ -1,35 +1,80 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const user = ref({});
+const router = useRouter();
+
+onMounted(() => {
+  const tenantData = sessionStorage.getItem('tenant');
+  if (tenantData) {
+    try {
+      user.value = JSON.parse(tenantData);
+    } catch (error) {
+      console.error('Failed to parse tenant data:', error);
+      router.push('/login');
+    }
+  } else {
+    router.push('/login');
+  }
+});
+
+const goToEditProfile = () => {
+  router.push('/edit');
+};
+
+const hasOrders = () => user.value.payments && user.value.payments.length > 0;
+</script>
+
 <template>
-    <div class="header">
-        <div class="left">
-          <img
-            width="64"
-            height="64"
-            src="https://img.icons8.com/arcade/64/cottage.png"
-            alt="cottage"
-          />
-          <router-link to="/" class="home-link">Back</router-link>
-            
-        </div >
-        
-      </div>
-      
-      <div class="profile-page">
-    <!-- Toggle Button -->
-    
-    
-    <!-- Left Side: Profile Info -->
-    <div class="profile-info" :class="{ collapsed: isCollapsed }">
+  <div class="header">
+    <div class="left">
+      <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/228BE6/long-arrow-left.png" alt="long-arrow-left"/>
+      <router-link to="/" class="home-link">Back</router-link>
+    </div>
+  </div>
+  
+  <div class="profile-page" v-if="user && Object.keys(user).length">
+   
+    <div class="profile-info">
       <img src="https://cdn1.iconfinder.com/data/icons/mix-color-3/502/Untitled-7-1024.png" alt="Profile Image" class="profile-image"/>
-      <h2>{{ user.name }}</h2>
-      <p>{{ user.email }}</p>
-      <button>Edit Profile</button>
-      <button class="toggle-btn" @click="toggleSidebar">
-      {{ isCollapsed ? '>>' : '<<' }}
-    </button>
+      <div style="display:flex;justify-content:space-between; align-items: center;"><h2 style="margin-right: 1rem;">{{ user.firstName }}</h2>
+      <h2>{{ user.lastName }}</h2></div>
+
+      <div style="display:flex;justify-content:space-between; align-items: center;">
+        <h3 style="margin-right: 1rem;">Email :</h3>
+        <p>{{ user.email }}</p>
+      </div>
+        <div style="display:flex;justify-content:space-between; align-items: center;"><h3 style="margin-right: 1rem;">Phone No. :</h3>
+          <p>{{ user.phoneNumber }}</p></div>
+
+          <div style="display:flex;justify-content:space-between; align-items: center;"><h3 style="margin-right: 1rem;">State :</h3>
+            <p>{{ user.state }}</p></div>
+            
+            <div style="display:flex;justify-content:space-between; align-items: center;"><h3 style="margin-right: 1rem;">City :</h3>
+              <p>{{ user.city }}</p></div>
+              <div style="display:flex;justify-content:space-between; align-items: center;"><h3 style="margin-right: 1rem;">Zip-Code :</h3>
+                <p>{{ user.zipCode }}</p></div>
+      
+                <button @click="goToEditProfile">Edit Profile</button>
     </div>
 
-    <!-- Right Side: User Details -->
-    <div class="user-details">
+    
+    <div v-if="hasOrders()" class="user-details">
+      <h2>Order History</h2>
+      <ul>
+        <li v-for="payment in user.payments" :key="payment.id">{{ payment.details }}</li>
+      </ul>
+    </div>
+    <div v-else class="user-details">
+      <div><h2>Order History</h2></div>
+      <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; "><p style="font-size: 3rem; margin-bottom: 5rem;">No orders found.</p></div>
+      
+    </div>
+  </div>
+  
+  
+    <!-- <div class="user-details">
       <h2>Rented Properties</h2>
       <div class="property-list">
         <div class="property-card" v-for="property in user.rentedProperties" :key="property.id">
@@ -41,8 +86,8 @@
           </div>
         </div>
       </div>
-      
-      <h2>Order History</h2>
+       -->
+      <!-- <h2>Order History</h2>
       <ul>
         <li v-for="order in user.orderHistory" :key="order.id">{{ order.details }}</li>
       </ul>
@@ -52,46 +97,8 @@
         <p>Start Date: {{ user.rentalPeriod.startDate }}</p>
         <p>End Date: {{ user.rentalPeriod.endDate }}</p>
       </div>
-    </div>
-  </div>  
-  </template>
+    </div> -->
   
-  <script setup>
-  import { ref } from 'vue';
-  
-  const user = ref({
-    name: "Rahul",
-    email: "Rahul@example.com",
-    rentedProperties: [
-      {
-        id: 1,
-        name: "Green Shores",
-        location: "Nagaon, Alibaug",
-        price: 2500,
-        image: "https://www.villabalisale.com/uploads/images/property/2023-04-26-property-6448915ee5dca.jpg"
-      },
-      {
-        id: 2,
-        name: "LakeView Inn",
-        location: "Palghar",
-        price: 1500,
-        image: "https://i.pinimg.com/originals/11/4c/e9/114ce94d782662858157cbe701ed5ab3.jpg"
-      }
-    ],
-    orderHistory: [
-      { id: 1, details: "Order #1234 - Green Shores" },
-      { id: 2, details: "Order #5678 - LakeView Inn" }
-    ],
-    rentalPeriod: {
-      startDate: "2024-08-01",
-      endDate: "2024-08-15"
-    }
-  });
-  const isCollapsed = ref(false);
+</template>
 
-const toggleSidebar = () => {
-  isCollapsed.value = !isCollapsed.value;
-};
-  </script>
-  <style scoped src="../css/UserProfile.css"></style>
-  
+<style scoped src="../css/UserProfile.css"></style>

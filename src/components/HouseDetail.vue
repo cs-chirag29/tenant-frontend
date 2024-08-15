@@ -1,6 +1,5 @@
 <template>
     <div>
-      <!-- Navbar -->
       <div class="header">
         <div class="left">
           <img
@@ -13,7 +12,7 @@
         </div>
       </div>
   
-      <!-- House Detail -->
+
       <div class="house-detail">
         <div class="house-header">
           <img :src="house.image" alt="House Image" class="house-image"/>
