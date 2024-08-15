@@ -42,16 +42,16 @@
     sessionStorage.setItem('authToken', response.data); 
     toast.success('User registered successfully!');
     
-    setTimeout(() => {
+   
       router.push('/login');
-    }, 2000); 
+   
   } catch (error) {
     toast.error('There was an error creating the user.');
     console.error('There was an error creating the user:', error);
   } finally {
-    setTimeout(() => {
+   
       loading.value = false;
-    }, 2000); 
+   
   }
 }
 

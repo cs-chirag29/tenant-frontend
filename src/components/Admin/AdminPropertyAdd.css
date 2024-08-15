@@ -1,0 +1,104 @@
+.admin-add{
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+div {
+  margin: 20px;
+  border-radius: 8px;
+  
+}
+
+h1 {
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;  
+    -moz-background-clip: text;     
+    color: transparent;      
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+
+form {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+div > div {
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-direction: column; */
+}
+
+label {
+  font-size: 1rem;
+ 
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  margin-left: 1rem;
+}
+.container{
+  flex-wrap: wrap;
+  display: flex;
+  width: 98%;
+}
+
+/* Button styling */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 30vw;
+    margin: auto;
+    margin-bottom: 2rem;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #c0c0c0;
+  cursor: not-allowed;
+}
+
+
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

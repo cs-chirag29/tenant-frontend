@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import ToastPlugin from 'vue-toast-notification';
-//import 'vue-toast-notification/dist/theme-default.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import LoginPage from './components/LoginPage.vue';
 import HomePage from './components/HomePage.vue';
@@ -12,6 +11,7 @@ import PaymentPage from "./components/PaymentPage.vue"
 
 import HouseDetail from './components/HouseDetail.vue';
 import UserProfile from './components/UserProfile.vue'
+import AdminPropertyAdd from './components/Admin/AdminPropertyAdd.vue';
 
 
 const router = createRouter({
@@ -25,14 +25,17 @@ const router = createRouter({
 
         {
             path: '/house/:id',
-            
-            component: HouseDetail, // The detail page component
-            props: true, // Pass route params as props to the component
+            component: HouseDetail, 
+            props: true, 
           },
           {
             path: '/profile',
             name: 'UserProfile',
             component: UserProfile,
+          },{
+            path: '/admin/addproperty',
+            name: 'AdminPropertyAdd',
+            component: AdminPropertyAdd,
           }
 
     ]

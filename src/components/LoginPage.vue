@@ -25,7 +25,7 @@ const onSubmit = async () => {
     if (response.data) {
       
       const tenant = response.data;
-      console.log(tenant);
+      // console.log(tenant);
       
       sessionStorage.setItem('tenant', JSON.stringify(tenant));
       router.push('/profile');
