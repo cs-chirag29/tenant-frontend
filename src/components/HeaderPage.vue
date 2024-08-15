@@ -21,6 +21,9 @@
         <router-link to="/login">
           <button>Sign In</button>
         </router-link>
+        <router-link to="/profile">
+          <button>Profile</button>
+        </router-link>
       </div>
     </div>
   </template>
