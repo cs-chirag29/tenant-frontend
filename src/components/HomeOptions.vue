@@ -6,6 +6,14 @@
       <span><h3>Most Popular House Rental Deals</h3></span>
       <div class="homeoptions-container">
         <HouseBox v-for="house in houses" :key="house.id" :house="house"/>
+        <router-link 
+          v-for="house in houses" 
+          :key="house.id" 
+          :to="`/house/${house.id}`" 
+          class="house-link"
+        >
+          
+        </router-link>
       </div>
       <button class="homeoptions-button">View More →</button>
     </div>
@@ -18,21 +26,21 @@ import HouseBox from './HouseBox.vue';
 
 const houses = ref([{
   id:1,
-    image: "https://tse4.mm.bing.net/th/id/OIP._yC174sEBWELImhmt0sS8gHaE2?rs=1&pid=ImgDetMain",
-    name: "House-1",
-    price: 1000,
+    image: "https://www.villabalisale.com/uploads/images/property/2023-04-26-property-6448915ee5dca.jpg",
+    name: "Green Shores",
+    price: 2500,
     description: "Charming, move-in-ready home with contemporary features and a prime location."
 }, {
   id:2,
-    image: "https://tse4.mm.bing.net/th/id/OIP._yC174sEBWELImhmt0sS8gHaE2?rs=1&pid=ImgDetMain",
-    name: "House-2",
-    price: 1000,
+    image: "https://i.pinimg.com/originals/11/4c/e9/114ce94d782662858157cbe701ed5ab3.jpg",
+    name: "LakeView Inn",
+    price: 1500,
     description: "Charming, move-in-ready home with contemporary features and a prime location."
 }, {
   id:3,
-    image: "https://tse4.mm.bing.net/th/id/OIP._yC174sEBWELImhmt0sS8gHaE2?rs=1&pid=ImgDetMain",
-    name: "House-3",
-    price: 1000,
+    image: "https://i.pinimg.com/originals/19/1f/c1/191fc146dfe4737399c70386faacdaf1.jpg",
+    name: "Cozy Inn",
+    price: 1200,
     description: "Charming, move-in-ready home with contemporary features and a prime location."
 }]);
 

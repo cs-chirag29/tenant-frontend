@@ -7,7 +7,12 @@ import 'vue-toast-notification/dist/theme-bootstrap.css';
 import LoginPage from './components/LoginPage.vue';
 import HomePage from './components/HomePage.vue';
 import SignupPage from './components/SignupPage.vue';
+
 import PaymentPage from "./components/PaymentPage.vue"
+
+import HouseDetail from './components/HouseDetail.vue';
+import UserProfile from './components/UserProfile.vue'
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -15,7 +20,21 @@ const router = createRouter({
         { path: '/', component: HomePage },
         { path: '/signup', component: SignupPage },
         { path: '/login', component: LoginPage },
+
         { path: '/payment', component: PaymentPage },
+
+        {
+            path: '/house/:id',
+            
+            component: HouseDetail, // The detail page component
+            props: true, // Pass route params as props to the component
+          },
+          {
+            path: '/profile',
+            name: 'UserProfile',
+            component: UserProfile,
+          }
+
     ]
 });
 
