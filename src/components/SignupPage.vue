@@ -2,19 +2,26 @@
   import { ref} from "vue"
   import axios from "axios";
   import HeaderPage from "./HeaderPage.vue";
-  
+  import { useRouter } from 'vue-router'; 
+  import LoaderPage from "./Utils/LoaderPage.vue";
+  import {useToast} from 'vue-toast-notification';
+
   const user = ref(  {
         firstName: '',
         lastName: '',
         email: '',
-        contact: '',
+        phoneNumber: '',
         address: '',
         city: '',
         state: '',
         zipCode: '',
-        dateOfBirth: ''
+        userName: '',
+        password: ''
       })
 
+      const loading= ref(false);
+      const router = useRouter(); 
+      const toast = useToast();
     // const  errors= ref({});
     
     // const  validateForm=() =>{
@@ -25,25 +32,35 @@
     //     if (!this.loginData.password) this.errors.password = true;
     //   }
 
-    //   const validEmail=(email) =>{
-    //     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //     return re.test(email);
-    //   }
+ 
 
   const onSubmit = async () => {
+    loading.value = true; 
   try {
-    const response = await axios.post('http://localhost:8080/users', user.value);
-    console.log('User created:', response.data);
+    const response = await axios.post('http://localhost:8080/api/tenants', user.value); 
+    
+    sessionStorage.setItem('authToken', response.data); 
+    toast.success('User registered successfully!');
+    
+    setTimeout(() => {
+      router.push('/login');
+    }, 2000); 
   } catch (error) {
+    toast.error('There was an error creating the user.');
     console.error('There was an error creating the user:', error);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 2000); 
   }
 }
 
     
   </script>
-<template>
+<template>  
   <HeaderPage></HeaderPage>
-    <div class="container">
+  <LoaderPage v-if="loading.value" />
+  <div v-else class="container">
       <form @submit.prevent="onSubmit" novalidate>
         <h2 class="text-center">Sign Up</h2>
   
@@ -88,7 +105,7 @@
         <input
           type="text"
           id="contact"
-          v-model="user.contact"
+          v-model="user.phoneNumber"
           :class="{'form-control': true}"
           required
         />
@@ -143,7 +160,7 @@
         
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="dateOfBirth">Date of Birth</label>
         <input
           type="date"
@@ -152,13 +169,33 @@
           :class="{'form-control': true}"
           required
         />
+      </div> -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          v-model="user.userName"
+          :class="{'form-control': true}"
+          required
+        />
       </div>
-  
-        <button type="submit"  class="btn btn-primary">Sign Up</button>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          v-model="user.password"
+          :class="{'form-control': true}"
+          required
+        />
+      </div>
+
+        <button type="submit" :disabled="loading.value" class="btn btn-primary">{{ loading.value ? 'Signing Up...' : 'Sign Up' }}</button>
       </form>
       
     </div>
-
    
   </template>
   
