@@ -1,0 +1,161 @@
+.home-page {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.home-left {
+    width: 40%;
+    height: 80vh;
+    margin-right: 8rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.home-left span h1 {
+    font-size: 5rem;
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin: 3rem 0rem 0.5rem 0rem;
+}
+
+.home-left h1 {
+    font-size: 5rem;
+    margin: 0rem;
+}
+
+.home-left p {
+    margin: 3rem 0rem;
+    font-size: 1.2rem;
+    color: rgb(102, 101, 101);
+
+}
+
+.home-page-booking {
+    width: 60vw;
+    height: 12vh;
+    transform: translate(0, 8rem);
+}
+
+.home-reservation-form {
+    display: flex;
+    flex-direction: row;
+}
+
+.home-form-group {
+    margin-right: 20px;
+}
+
+.home-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.home-form-group input,
+.home-reservation-form button {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.home-reservation-form button {
+    background: linear-gradient(to top left, #000080, #00bfff);
+    color: white;
+    cursor: pointer;
+}
+
+
+.home-right {
+    width: 35%;
+    height: 95vh;
+    display: flex;
+    justify-content: flex-start;
+    /* background: linear-gradient(to top left, #000080, #00bfff); */
+    /* border-radius: 70px 70px 0px 0px; */
+}
+
+.home-right img {
+     width: 50vw;
+    height: 60vh;
+    transform: translate(-5rem, 3rem); 
+    border-radius: 20px;
+}
+
+@media screen and (max-width: 600px) {
+
+    .home-left {
+        height: 70vh;
+        margin-right: 3rem;
+    }
+
+    .home-left span h1 {
+        transform: translate(0, 8.5rem);
+        font-size: 30px;
+    }
+
+    .home-left h1 {
+        transform: translate(0rem, 8.5rem);
+        font-size: 30px;
+    }
+
+    .home-left p {
+        transform: translate(0rem, 9rem);
+        font-size: 10px;
+    }
+
+    .home-page-booking {
+        width: 80vw;
+        height: 7vh;
+        transform: translate(0rem, 11rem);
+    }
+
+    .home-reservation-form {
+        width: 100%;
+        height: 100%;
+    }
+
+    .home-form-group {
+        width: 100%;
+        height: 50%;
+        margin-right: 3px;
+    }
+
+    .home-form-group label {
+        font-size: 6px;
+    }
+
+    .home-form-group input {
+        padding: 5px;
+        font-size: 6px;
+        border-radius: 4px;
+        width: 60px;
+    }
+
+    .home-page-booking button {
+        margin-top: 0.7rem;
+        padding: 5px;
+        font-size: 6px;
+        width: 200px;
+        height: 25px;
+    }
+
+
+    .home-right {
+        width: 35%;
+        height: 68vh;
+        border-radius: 25px 25px 0px 0px;
+    }
+
+    .home-right img {
+        width: 85vw;
+        height: 20vh;
+        transform: translate(-4rem, 8rem);
+    }
+
+}
