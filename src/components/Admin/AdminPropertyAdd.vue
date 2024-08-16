@@ -75,7 +75,7 @@ const onSubmit = async () => {
 <template>
   <div class="admin-add">
     <form @submit.prevent="onSubmit" novalidate>
-      <!-- Property Property Details Section -->
+      
       <div>
         <h1>Add Property Details</h1>
         <div class="container">
