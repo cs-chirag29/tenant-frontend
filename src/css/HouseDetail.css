@@ -1,0 +1,112 @@
+
+.house-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.house-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.house-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.house-title h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.house-title h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.house-info {
+  margin-top: 2rem;
+}
+
+.house-info h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.house-info p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.house-info ul {
+  list-style-type: disc;
+  margin-left: 2rem;
+}
+
+.house-info li {
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.house-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.house-actions button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.house-actions button:hover {
+  background-color: #0056b3;
+}
+
+/* Additional styles for Navbar */
+.header {
+  width: 100%;
+  height: 12vh;
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  width: auto;
+  display: flex;
+  align-items: center;
+}
+
+.left img {
+  margin-right: 1rem;
+}
+
+.home-link {
+  color: rgb(102, 101, 101);
+  text-decoration: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.home-link:hover {
+  background: linear-gradient(to top left, #000080, #00bfff);
+  -webkit-background-clip: text;
+  color: transparent;
+  transform: scale(1.1);
+  cursor: pointer;
+}

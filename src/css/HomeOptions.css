@@ -66,6 +66,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+   
 }
 
 .homeoption-2 h3 {
@@ -79,6 +80,16 @@
     color: gray;
 }
 
+.truncate-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines to display */
+    -webkit-box-orient: vertical;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
 .homeoption-2 h2 {
     font-weight: lighter;
 }

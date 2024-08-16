@@ -1,36 +1,42 @@
+<template>
+  <div class="homeoptioncard" @click="navigateToProperty">
+    <div class="homeoption-1">
+      <img src="https://www.villabalisale.com/uploads/images/property/2023-04-26-property-6448915ee5dca.jpg" alt="home" /> <!-- Static image path -->
+    </div>
+    <div class="homeoption-2">
+      <h3>{{ property.propertyName }}</h3>
+      <p class="truncate-text">{{ property.description }}</p>
+      <h2>Rs 2500/day</h2>
+    </div>
+  </div>
+</template>
+
 <script setup>
-import {defineProps} from 'vue';
+import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
-  house: Object
+  property: {
+    type: Object,
+    required: true
+  }
 });
 
 const router = useRouter();
 
-const navigateToHouse = () => {
-  if (props.house.id) {
-    router.push(`/house/${props.house.id}`);
+const navigateToProperty = () => {
+  console.log('Property in navigateToProperty:', props.property); // Debugging output
+  if (props.property && props.property.propertyId) {
+    router.push(`/house/${props.property.propertyId}`);
   } else {
-    console.error('House ID is missing');
+    console.error('Property ID is missing');
   }
 };
-  </script>
 
-<template>
-    <button class="homeoptioncard" @click="navigateToHouse" >
-      <div class="homeoption-1">
-        <img :src="house.image" alt="home" />
-      </div>
-      <div class="homeoption-2">
-        <h3>{{ house.name }}</h3>
-        <p>{{ house.description }}</p>
-        <h2>Rs {{ house.price }}/day</h2>
-      </div>
-    </button>
-  </template>
-  
-  
-  
-  <style scoped src="../css/HomeOptions.css"></style>
-  
+// Debugging output
+console.log('Property in HouseBox:', props.property);
+</script>
+
+
+
+<style scoped src="../css/HomeOptions.css"></style>
