@@ -12,6 +12,11 @@ import PaymentPage from "./components/PaymentPage.vue"
 import HouseDetail from './components/HouseDetail.vue';
 import UserProfile from './components/UserProfile.vue'
 import AdminPropertyAdd from './components/Admin/AdminPropertyAdd.vue';
+import OrderPage from './components/OrderPage.vue';
+import BookingPage from './components/BookingPage.vue';
+import EditProfile from './components/EditProfile.vue';
+import AdminDashboard from './components/Admin/AdminDashboard.vue';
+import ManageProperties from "./components/Admin/ManageProperties.vue"
 
 
 const router = createRouter({
@@ -36,6 +41,27 @@ const router = createRouter({
             path: '/admin/addproperty',
             name: 'AdminPropertyAdd',
             component: AdminPropertyAdd,
+          },{
+            path: "/orderdetails",
+            name: 'OrderPage',
+            component: OrderPage, 
+          },{
+            path: "/book/:id",
+            name: 'BookingPage',
+            component: BookingPage, 
+          },{
+            path: "/edit",
+            name: 'EditProfile',
+            component: EditProfile, 
+          },{
+            path: "/admin",
+            name: 'AdminDashBoard',
+            component: AdminDashboard, 
+          },
+          {
+            path: "/admin/manage-properties",
+            name: 'ManageProperties',
+            component: ManageProperties, 
           }
 
     ]
