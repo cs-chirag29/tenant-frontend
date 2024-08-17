@@ -4,6 +4,9 @@ import HomeOptions from './HomeOptions.vue';
 import ReviewsPage from './ReviewsPage.vue';
 import HelpPage from "./HelpPage.vue";
 
+
+
+
 </script>
 <template>
   <HeaderPage></HeaderPage>

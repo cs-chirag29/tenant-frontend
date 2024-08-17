@@ -9,7 +9,8 @@ const property = ref({
     address: '',
     city: '',
     zipCode: '',
-    state: ''
+    state: '',
+    description:''
 });
 
 const unit = ref({
@@ -56,7 +57,8 @@ const onSubmit = async () => {
             address: '',
             city: '',
             zipCode: '',
-            state: ''
+            state: '',
+            description:'',
         };
         unit.value = {
             unitNumber: '',
@@ -75,7 +77,7 @@ const onSubmit = async () => {
 <template>
   <div class="admin-add">
     <form @submit.prevent="onSubmit" novalidate>
-      <!-- Property Details Section -->
+     
       <div>
         <h1>Add Property Details</h1>
         <div class="container">
@@ -99,6 +101,13 @@ const onSubmit = async () => {
             <label for="propertyState">State:</label>
             <input v-model="property.state" id="propertyState" type="text" required />
           </div>
+
+          <div class="content">
+            <label for="propertyDescription">Desciption:</label>
+            <input v-model="property.description" id="propertyDescription" type="text" required />
+          </div>
+
+
         </div>
       </div>
 
@@ -115,7 +124,7 @@ const onSubmit = async () => {
             <input v-model="unit.unitType" id="unitType" type="text" required />
           </div>
           <div class="content">
-            <label for="unitImage">Unit Image:</label>
+            <label for="unitImage">Image Url:</label>
             <input v-model="unit.unitImage" id="unitImage" type="text" required />
           </div>
           <div class="content">

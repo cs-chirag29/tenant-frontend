@@ -28,9 +28,9 @@ const hasOrders = () => user.value.payments && user.value.payments.length > 0;
 
 <template>
   <div class="header">
-    <div class="left">
-      <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/228BE6/long-arrow-left.png" alt="long-arrow-left"/>
-      <router-link to="/" class="home-link">Back</router-link>
+    <div class="left" style="position: absolute; left: 2%; right: 2%;">
+      <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/228BE6/long-arrow-left.png" alt="long-arrow-left"/>
+      <router-link to="/" class="home-link" style="font-size: 1.5rem;">Back</router-link>
     </div>
   </div>
   

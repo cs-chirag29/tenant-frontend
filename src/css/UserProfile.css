@@ -4,7 +4,7 @@
     padding: 2rem;
 }
 
-/* Collapse Button */
+
 .toggle-btn {
     position: absolute;
     right: 0;
@@ -13,9 +13,9 @@
     border: none;
     background-color: #007bff;
     color: white;
-    border-radius: 0 5px 5px 0; /* Rounded corners on the right side */
+    border-radius: 0 5px 5px 0; 
     cursor: pointer;
-    z-index: 1; /* Ensures it stays above other content */
+    z-index: 1; 
     transition: background-color 0.3s;
 }
 
@@ -23,10 +23,10 @@
     background-color: #0056b3;
 }
 
-/* Left Side: Profile Info */
+
 .profile-info {
-    position: relative; /* For positioning the collapse button */
-    width: 20%;
+    position: relative; 
+    width: 30%;
     margin-right: 2rem;
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@
 
 .profile-info.collapsed {
     width: 10%;
-    opacity: 0.5; /* Optional: makes the collapsed section semi-transparent */
+    opacity: 0.5; 
 }
 
 .profile-image {
