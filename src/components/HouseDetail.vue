@@ -21,7 +21,7 @@ onMounted( async()=>{
 })
 
 const bookHouse = () => {
-  router.push(`/book/${houseId}`)
+  router.push({ name: 'BookingPage', query: { fromHouseDetail: true } });
 };
 
 

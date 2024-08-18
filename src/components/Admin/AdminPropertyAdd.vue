@@ -75,6 +75,12 @@ const onSubmit = async () => {
 </script>
 
 <template>
+  <div class="header">
+      <div class="left" style="position: absolute; display: flex; justify-content: center; align-items: center; left: 2%; top: 2%;">
+        <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/228BE6/long-arrow-left.png" alt="long-arrow-left"/>
+        <router-link to="/admin" class="home-link" style="text-decoration: none; font-size: 1.2rem; color: #333; margin-left: 0.5rem">Back</router-link>
+      </div>
+    </div>
   <div class="admin-add">
     <form @submit.prevent="onSubmit" novalidate>
      

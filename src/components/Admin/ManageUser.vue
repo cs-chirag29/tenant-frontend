@@ -4,25 +4,44 @@ import { onMounted, ref } from 'vue';
 import {useToast} from 'vue-toast-notification';
 
 const toast = useToast();
-const units = ref([]);
+const users = ref([]);
+const selectedUserId = ref(null);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8080/units');
-    units.value = response.data;
+    const response = await axios.get('http://localhost:8080/tenants/getAllTenants');
+    users.value = response.data;
   } catch (error) {
-    console.error('Error fetching units:', error);
+    console.error('Error fetching users:', error);
   }
 });
 
+const handleRoleChange = (userId, role) => {
+  selectedUserId.value = userId;
+  const user = users.value.find(u => u.tenantId === userId);
+  if (user) {
+    user.role = role;
+  }
+};
 
-const deleteUnit = async (unitId) => {
+const updateRole = async (user) => {
   try {
-    await axios.delete(`http://localhost:8080/units/${unitId}`);
-    units.value = units.value.filter(unit => unit.unitId !== unitId);
-    toast.success("Unit Removed  Successfully")
+    await axios.put(`http://localhost:8080/tenants/${user.tenantId}`,  user);
+    toast.success("User Role changed Successfully")
   } catch (error) {
-    toast.success("Error while removing unit")
+    toast.error('Error updating role:', error);
+  }
+};
+
+const deleteUser = async (userId) => {
+  try {
+    await axios.delete(`http://localhost:8080/api/user-logins/${userId}`);
+    users.value = users.value.filter(user => user.tenantId !== userId);
+
+    await axios.delete(`http://localhost:8080/tenants/${userId}`);
+    toast.success("User Deleted Successfully")
+  } catch (error) {
+    toast.success("Error while deleting user")
   }
 };
 </script>
@@ -48,25 +67,34 @@ const deleteUnit = async (unitId) => {
       </div>
 
       <div class="main-content">
-        <h1>Properties Details</h1>
+        <h1>User Details</h1>
     
         <div>
-          <div class="listed-properties" v-for="unit in units" :key="unit.unitId">
+          <div class="listed-properties" v-for="user in users" :key="user.tenantId">
             <div>
-              <img :src="unit?.unitImage" style="width: 5rem; border-radius: 5px; margin-top: 0.15rem;"/>
+              <h3>{{ user.firstName }} {{ user.lastName }}</h3>
             </div>
-            <h3>{{ unit?.property?.propertyName }} </h3>
-            <h3>{{ unit?.property?.address }}</h3>
-            <h3>{{ unit?.property?.city }}</h3>
-            <h3>{{ unit?.rentAmount }}</h3>
-            <h3>{{ unit?.status }}</h3>
+            <h3>{{ user.email }}</h3>
+            <h3>{{ user.phoneNumber }}</h3>
+            <select v-model="user.role" @change="handleRoleChange(user.tenantId, user.role)">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
             <button 
-              :id="`delete-button-${unit.unitId}`"
-              @click="deleteUnit(unit.unitId)"
+              :id="`delete-button-${user.tenantId}`"
+              @click="deleteUser(user.tenantId)"
+              style="cursor: pointer;"
             >
               <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/FA5252/filled-trash.png" alt="filled-trash"/>
             </button>
-            
+            <button 
+            class="update-button"
+              :id="`update-button-${user.tenantId}`" 
+              
+              @click="updateRole(user)"
+            >
+              Update
+            </button>
           </div>
         </div>
       </div>
@@ -83,9 +111,6 @@ const deleteUnit = async (unitId) => {
     flex-direction: column;
   }
 
-  button {
-    cursor: pointer;
-  }
   .admin-dashboard-2{
     display: flex;
   }

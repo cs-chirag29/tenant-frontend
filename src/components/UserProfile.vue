@@ -1,10 +1,12 @@
 <script setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import {  useRouter } from 'vue-router';
+import {useToast} from 'vue-toast-notification';
 
 const user = ref({});
 const router = useRouter();
+const toast = useToast();
 const orders= ref([]);
 const tenantId = ref(null); 
 
@@ -48,7 +50,14 @@ const calculateTotalDays = (startDate, endDate) => {
   const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
   return dayDiff + 1;
 };
-
+const handlelogout=()=>{
+  sessionStorage.setItem("tenant", "");
+  toast.success("Logout Successful")
+  router.push("/login")
+}
+const handleadmin=()=>{
+  router.push("/admin")
+}
 </script>
 
 <template>
@@ -81,7 +90,12 @@ const calculateTotalDays = (startDate, endDate) => {
               <div style="display:flex;justify-content:space-between; align-items: center;"><h3 style="margin-right: 1rem;">Zip-Code :</h3>
                 <p>{{ user.zipCode }}</p></div>
       
+                <div style="display: flex; justify-content: space-evenly;">
                 <button @click="goToEditProfile">Edit Profile</button>
+                <button style="margin-left: 2rem;" @click="handlelogout">Logout</button>
+              </div>
+              <div style="margin-top: 2rem;"><button v-if="user.role === 'admin'" @click="handleadmin">Admin Dashboard</button></div>
+              
     </div>
 
     

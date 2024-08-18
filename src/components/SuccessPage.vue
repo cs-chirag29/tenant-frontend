@@ -11,7 +11,18 @@
   </template>
   
   <script setup>
+import { onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+
+onMounted(() => {
   
-  </script>
+  if (!route.query?.fromBookingPage) {
+    router.push('/');
+  }
+});
+</script>
   
   <style scoped src="../css/SuccessPage.css"></style>
