@@ -37,7 +37,7 @@
   const onSubmit = async () => {
     loading.value = true; 
   try {
-    const response = await axios.post('http://localhost:8080/api/tenants', user.value); 
+    const response = await axios.post('http://localhost:8080/tenants', user.value); 
     
     sessionStorage.setItem('authToken', response.data); 
     toast.success('User registered successfully!');

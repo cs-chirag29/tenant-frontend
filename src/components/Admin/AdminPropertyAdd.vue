@@ -23,11 +23,6 @@ const unit = ref({
 
 
 const toast = useToast();
-// const lease = ref({
-//   leaseStartDate: '',
-//   leaseEndDate: '',
-//   securityDeposit: '' 
-// });
 
 
 const statuses = ['Available', 'Not Available'];
@@ -36,18 +31,23 @@ const onSubmit = async () => {
   console.log('Submitting data:', property.value);
   
   try {
-    const propertyResponse = await axios.post('http://localhost:8080/api/properties/', property.value);
-    const propertyId = propertyResponse.data.propertyId;
+     const propertyResponse = await axios.post('http://localhost:8080/properties', property.value, {
+      headers: {
+        'Content-Type': 'application/json'  
+      }
+    });
 
-    console.log(unit.value);
+    const propertyId = propertyResponse.data.propertyId;
+    console.log('Property ID:', propertyId);
+   
     const unitData = {
     ...unit.value,
-    propertyId: propertyId,
+    propertyId: propertyId ,
     rentAmount: parseFloat(unit.value.rentAmount)
   };
-  console.log(unitData)
+  console.log(unitData);
   
-    const unitResponse = await axios.post('http://localhost:8080/api/units', unitData);
+    const unitResponse = await axios.post('http://localhost:8080/units', unitData);
 
     console.log(unitResponse.unitId);
     toast.success("Data Added successfully");
@@ -103,7 +103,7 @@ const onSubmit = async () => {
           </div>
 
           <div class="content">
-            <label for="propertyDescription">Desciption:</label>
+            <label for="propertyDescription">Description:</label>
             <input v-model="property.description" id="propertyDescription" type="text" required />
           </div>
 

@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios';
-import { computed } from 'vue';
-import { ref, onMounted,  } from 'vue';
+// import { computed } from 'vue';
+import { ref, onMounted, computed,  } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {useToast} from 'vue-toast-notification';
 
@@ -41,7 +41,7 @@ console.log(tenantId);
 console.log(userDetails.value)
 
 try {
-  const response = await axios.get(`http://localhost:8080/api/units/getUnitById/${id}`)
+  const response = await axios.get(`http://localhost:8080/units/${id}`)
   unit.value=response.data;
   console.log(unit.value);
 } catch (error) {
@@ -50,24 +50,15 @@ try {
 
 });
 
-const ratePerDay = computed(() => unit.value.rentAmount / 30);
-const totalAmount = computed(() => {
-  if (!leaseInfo.value.startDate || !leaseInfo.value.endDate) {
-    return 0;
-  }
+// const ratePerDay = computed(() => unit.value.rentAmount / 30);
 
-  const startDate = new Date(leaseInfo.value.startDate);
-  const endDate = new Date(leaseInfo.value.endDate);
-
-  if (endDate <= startDate) {
-    return 0;
-  }
-
-  const timeDifference = endDate - startDate;
-  const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
-  return dayDifference * ratePerDay.value*30;
-});
+const calculateTotalDays = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const timeDiff = end - start;
+  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
+  return dayDiff+1;
+};
 
 const handleBooking= async()=>{
   if (!leaseInfo.value.securityDeposit || !leaseInfo.value.startDate || !leaseInfo.value.endDate) {
@@ -83,7 +74,7 @@ const handleBooking= async()=>{
       endDate: leaseInfo.value.endDate,
       unitId: unit.value.unitId,
     });
-    const response = await axios.post("http://localhost:8080/api/lease",{
+    const response = await axios.post("http://localhost:8080/leases",{
       tenantId: userDetails.value.tenantId,
       securityDeposit: leaseInfo.value.securityDeposit,
       startDate: leaseInfo.value.startDate,
@@ -98,7 +89,13 @@ const handleBooking= async()=>{
   }
   
 }
-
+const totalAmount = computed(() => {
+  if (unit.value.rentAmount && leaseInfo.value.startDate && leaseInfo.value.endDate) {
+    const days = calculateTotalDays(leaseInfo.value.startDate, leaseInfo.value.endDate);
+    return days * unit.value.rentAmount;
+  }
+  return 0;
+});
 </script>
 <template>
     <div>
@@ -228,11 +225,11 @@ const handleBooking= async()=>{
             <h1>BOOKING DETAILS</h1>
             <img :src="unit.unitImage" alt="house" />
             <div class="booking-container-2-box">
-              <h2 v-if="unit.property" style="margin-top:-2rem; margin-left: 6rem;">{{ unit.property.propertyName }}</h2>
+              <h2 v-if="unit.property" style="margin-top:-2rem; margin-left: 10rem;">{{ unit?.property?.propertyName }}</h2>
               <h3 style="margin-top: -2rem;">Contract Start Date: {{ leaseInfo.startDate  }}</h3>
               <h3 style="margin-top: -1rem; margin-bottom: 2rem;">Contract End Date: {{ leaseInfo.endDate }}</h3>
               <h2 style="margin-top: -2rem;">Rent: Rs {{ unit.rentAmount  }}/month </h2>
-              <h2 style="margin-top: -2rem;">Total: Rs {{ totalAmount }}/month </h2>
+              <h2 style="margin-top: -2rem;">Total: Rs {{totalAmount }}/month </h2>
               <span style="margin-top: -2rem;">(Excluding Security Deposit)</span>
             </div>
           </div>

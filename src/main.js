@@ -17,6 +17,8 @@ import BookingPage from './components/BookingPage.vue';
 import EditProfile from './components/EditProfile.vue';
 import AdminDashboard from './components/Admin/AdminDashboard.vue';
 import ManageProperties from "./components/Admin/ManageProperties.vue"
+import SuccessPage from './components/SuccessPage.vue';
+import AllHousesPage from './components/AllHousesPage.vue';
 
 
 const router = createRouter({
@@ -42,7 +44,7 @@ const router = createRouter({
             name: 'AdminPropertyAdd',
             component: AdminPropertyAdd,
           },{
-            path: "/orderdetails",
+            path: "/order/:id",
             name: 'OrderPage',
             component: OrderPage, 
           },{
@@ -62,6 +64,14 @@ const router = createRouter({
             path: "/admin/manage-properties",
             name: 'ManageProperties',
             component: ManageProperties, 
+          },{
+            path: "/success",
+            name: 'SuccessPage',
+            component: SuccessPage, 
+          },{
+            path: "/allHouses",
+            name: 'AllHousesPage',
+            component: AllHousesPage, 
           }
 
     ]

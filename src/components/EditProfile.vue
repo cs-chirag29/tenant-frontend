@@ -13,7 +13,7 @@ const toast = useToast();
 const saveProfile = async () => {
   try {
     const tenantId = user.value.tenantId;
-    const response = await axios.put(`http://localhost:8080/api/tenants/${tenantId}`, user.value);
+    const response = await axios.put(`http://localhost:8080/tenants/${tenantId}`, user.value);
     
     sessionStorage.setItem('tenant', JSON.stringify(response.data));
     toast.success('User updated successfully!');

@@ -24,6 +24,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .homeoptioncard {
@@ -100,3 +101,24 @@
 }
 
 
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .pagination-controls button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: linear-gradient(to top left, #000080, #00bfff);
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .pagination-controls span {
+    margin: 0 10px;
+    font-size: 16px;
+  }

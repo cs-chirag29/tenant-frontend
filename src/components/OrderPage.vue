@@ -1,27 +1,61 @@
+<script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { useRoute, } from 'vue-router';
+
+const route = useRoute();
+// const router = useRouter();
+
+const order = ref({});
+
+onMounted(async() => {
+  const id = route.params.id;
+  try {
+    const response = await axios.get(`http://localhost:8080/leases/${id}`);
+    order.value = response.data;
+  } catch (error) {
+    console.error('Error fetching lease details:', error);
+  }
+});
+const calculateTotalDays = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const timeDiff = end - start;
+  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
+  return dayDiff+1;
+};
+
+</script>
 <template>
     <!-- <div v-if="loading">
       <Loader />
     </div> -->
+    <div class="header">
+    <div class="left" style="position: absolute; left: 2%; top: 2%; display: flex; align-items: center; justify-content: center;">
+      <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/228BE6/long-arrow-left.png" alt="long-arrow-left"/>
+      <router-link to="/profile" class="home-link" style="font-size: 1.3rem; text-decoration: none; margin-left: 0.5rem; color: black;">Back</router-link>
+    </div>
+  </div>
     <div>
       <div class="orderdetails">
         <div class="orderdetails-heading">
-          <h1>ORDER DETAILS</h1>
+          <h1>BOOKING DETAILS</h1>
         </div>
         <div class="orderdetails-container-1">
-          <h1>ORDER INFO</h1>
+          <h1>BOOKING INFO</h1>
           <div class="orderdetails-detail-page">
             <form class="orderdetails-detail-form">
               <div class="orderdetails-group">
-                <label for="location">Location</label>
-                <h2>{{  }}</h2>
+                <label for="securityDeposit">Security Deposit</label>
+                <h2>Rs {{order.securityDeposit  }}</h2>
               </div>
               <div class="orderdetails-group">
-                <label for="pickup-date">Pickup Date</label>
-                <h2>{{ }}</h2>
+                <label for="start-date">Contract Start Date</label>
+                <h2>{{ order.startDate}}</h2>
               </div>
               <div class="orderdetails-group">
-                <label for="return-date">Return Date</label>
-                <h2>{{  }}</h2>
+                <label for="end-date">Contract End Date</label>
+                <h2>{{ order.endDate }}</h2>
               </div>
             </form>
           </div>
@@ -31,101 +65,69 @@
             <form class="orderdetails-form">
               <div class="orderdetails-group">
                 <label for="first-name">First Name</label>
-                <h2>{{ }}</h2>
+                <h2>{{order?.tenant?.firstName }}</h2>
               </div>
               <div class="orderdetails-group">
                 <label for="last-name">Last Name</label>
-                <h2>{{  }}</h2>
+                <h2>{{ order?.tenant?.lastName }}</h2>
               </div>
               <div class="orderdetails-group">
-                <label for="address-1">Address 1</label>
-                <h2>{{  }}</h2>
-              </div>
-              <div class="orderdetails-group">
-                <label for="address-2">Address 2</label>
-                <h2>{{  }}</h2>
+                <label for="address">Address</label>
+                <h2>{{ order?.tenant?.address }}</h2>
               </div>
               <div class="orderdetails-group">
                 <label for="city">City</label>
-                <h2>{{}}</h2>
+                <h2>{{order?.tenant?.city}}</h2>
               </div>
               <div class="orderdetails-group">
-                <label for="country">Country</label>
-                <h2>{{ }}</h2>
+                <label for="zipCode">Zipcode</label>
+                <h2>{{ order?.tenant?.zipCode }}</h2>
               </div>
               <div class="orderdetails-group">
-                <label for="phone">Phone</label>
-                <h2>{{  }}</h2>
+                <label for="phoneNumber">Phone Number</label>
+                <h2>{{ order?.tenant?.phoneNumber }}</h2>
               </div>
               <div class="orderdetails-group">
                 <label for="email">Email</label>
-                <h2>{{}}</h2>
+                <h2>{{order?.tenant?.email}}</h2>
               </div>
             </form>
           </div>
-  
-          <h1>ADDED EXTRAS</h1>
-          <div class="orderdetails-extra-page">
-            <form class="orderdetails-extra-form">
-              <div  class="orderdetails-extra-group">
-                <div class="orderdetails-extra-group-1">
-                  <label><img width="30" height="30" src="https://img.icons8.com/color/48/checked-2.png" alt="checked-2" /> Child Seat, Rs250/day</label>
-                </div>
-                <p>Add a child seat for your little one. We offer comfortable and safe child seats for a pleasant journey.</p>
-              </div>
-              <div  class="orderdetails-extra-group">
-                <div class="orderdetails-extra-group-1">
-                  <label><img width="30" height="30" src="https://img.icons8.com/color/48/checked-2.png" alt="checked-2" /> GPS Navigation, Rs550/day</label>
-                </div>
-                <p>When renting a car, you are often driving in new and unfamiliar areas. Choose a guaranteed GPS to never get lost, and to be directed through the quickest or most scenic routes.</p>
-              </div>
-              <div  class="orderdetails-extra-group">
-                <div class="orderdetails-extra-group-1">
-                  <label><img width="30" height="30" src="https://img.icons8.com/color/48/checked-2.png" alt="checked-2" /> Extended Insurance, Rs2050/day</label>
-                </div>
-                <p>We offer an extended insurance plan that includes additional services at no cost in the event of breakdowns, loss of keys, and similar incidents.</p>
-              </div>
-              <div  class="orderdetails-extra-group">
-                <div class="orderdetails-extra-group-1">
-                  <label><img width="30" height="30" src="https://img.icons8.com/color/48/checked-2.png" alt="checked-2" /> Wifi Hotspot, Rs100/day</label>
-                </div>
-                <p>The Wifi Hotspot allows up to 5 devices to connect to the Hotspot within your rental car. Our devices also come with a language translator, maps, local guides, and more.</p>
-              </div>
-              <div class="NoExtra-orderdetails">
-                <p>No extra added</p>
-              </div>
-            </form>
-          </div>
+
         </div>
   
         <div class="orderdetails-container-2">
-          <h1>CAR DETAILS</h1>
-          <img src="" alt="car" />
+          <h1>HOUSE DETAILS</h1>
+          <img :src="order?.unit?.unitImage" alt="house" />
           <div class="orderdetails-container-2-box">
             <div class="orderdetails-container-2-box-2">
               <div class="orderdetails-calculator">
-                <h3>Car Model</h3>
-                <h3></h3>
+                <h3>House Model</h3>
+                <h3>{{ order?.unit?.property?.propertyName }}</h3>
               </div>
               <div class="orderdetails-calculator">
-                <h3>Subtotal</h3>
-                <h3>Rs /day</h3>
+                <h3>Security Deposit</h3>
+                <h3>Rs {{ order?.securityDeposit }}</h3>
               </div>
               <div class="orderdetails-calculator">
-                <h3>Pickup</h3>
-                <h3></h3>
+                <h3>Rent Amount</h3>
+                <h3>Rs {{ order?.unit?.rentAmount }} /day</h3>
               </div>
               <div class="orderdetails-calculator">
-                <h3>Return</h3>
-                <h3></h3>
+                <h3>Booking From :</h3>
+                <h3>{{order.startDate}}</h3>
+              </div>
+              <div class="orderdetails-calculator">
+                <h3>Booking To :</h3>
+                <h3>{{ order.endDate }}</h3>
               </div>
               <div class="orderdetails-calculator">
                 <h3>Total Days</h3>
-                <h3></h3>
+                <h3>{{ calculateTotalDays(order.startDate, order.endDate)}} </h3>
               </div>
               <div class="orderdetails-calculator-total">
                 <h3>Total Amount</h3>
-                <h3>Rs </h3>
+                <h3>Rs {{ calculateTotalDays(order.startDate, order.endDate) * order.unit?.rentAmount }}</h3>
               </div>
             </div>
           </div>
@@ -133,10 +135,7 @@
       </div>
     </div>
   </template>
-  
-  <script setup>
-  
-  </script>
+
   
   <style scoped src="../css/OrderPage.css">
 
