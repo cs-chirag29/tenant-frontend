@@ -16,7 +16,7 @@ const toast = useToast();
 
 const onSubmit = async () => {
   try {
-    const response = await axios.post('http://localhost:8080/api/userlogins', {
+    const response = await axios.post('http://localhost:8080/api/user-logins', {
       username: user.value.userName,
       password: user.value.password,
     });

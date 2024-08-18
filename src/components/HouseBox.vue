@@ -15,6 +15,7 @@ const navigateToHouse = () => {
     console.error('House ID is missing');
   }
 };
+console.log(props.house.propertyId);
   </script>
 
 <template>

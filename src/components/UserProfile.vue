@@ -1,15 +1,19 @@
 <script setup>
+import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const user = ref({});
 const router = useRouter();
+const orders= ref([]);
+const tenantId = ref(null); 
 
-onMounted(() => {
+onMounted(async () => {
   const tenantData = sessionStorage.getItem('tenant');
   if (tenantData) {
     try {
       user.value = JSON.parse(tenantData);
+      tenantId.value = user.value.tenantId;
     } catch (error) {
       console.error('Failed to parse tenant data:', error);
       router.push('/login');
@@ -17,13 +21,34 @@ onMounted(() => {
   } else {
     router.push('/login');
   }
+
+  try {
+    const response = await axios.get("http://localhost:8080/leases");
+    orders.value = response.data.filter(order => order.tenant.tenantId === tenantId.value);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const goToEditProfile = () => {
   router.push('/edit');
 };
 
-const hasOrders = () => user.value.payments && user.value.payments.length > 0;
+const handleorder = (order) => {
+  router.push(`/order/${order.leaseId}`);
+};
+
+
+const calculateTotalDays = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  if (isNaN(start) || isNaN(end)) return 0;
+  
+  const timeDiff = end - start;
+  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
+  return dayDiff + 1;
+};
+
 </script>
 
 <template>
@@ -60,45 +85,43 @@ const hasOrders = () => user.value.payments && user.value.payments.length > 0;
     </div>
 
     
-    <div v-if="hasOrders()" class="user-details">
+    <div v-if="orders.length>0" class="user-details">
       <h2>Order History</h2>
-      <ul>
-        <li v-for="payment in user.payments" :key="payment.id">{{ payment.details }}</li>
-      </ul>
+
+      <div class="user-details-card" v-for="order in orders" :key="order.leaseId" @click="handleorder(order)">
+        <div>
+          <img :src="order?.unit?.unitImage"/>
+        </div>
+        <div style="width: 80%; display: flex; justify-content: space-between;">
+          <div style="display: flex; flex-direction: column; justify-content: space-between; margin-left: 1rem;">
+          <span  class="user-details-card-header">{{ order?.unit?.property?.propertyName }}</span>
+          <div style="display: flex; color: black; margin-top: -1rem;">
+          <h3 style="margin-right: 1rem;">{{ order?.unit?.property?.address }}</h3>
+          <h3>{{ order?.unit?.property?.city }}</h3>
+        </div>
+        <div style="margin-top: -1.2rem;">
+          <h3> Booking From : {{ order?.startDate }}</h3>
+          <h3 style="margin-top: -0.9rem;"> Booking To : {{ order?.endDate }}</h3>
+        </div>
+        </div>
+
+        <div >
+          <h3>Security Deposit : Rs {{ order?.securityDeposit }}</h3>
+          <h3>Rent Amount : Rs {{ order?.unit?.rentAmount }}</h3>
+          <h3>Total : Rs {{ calculateTotalDays(order.startDate, order.endDate) * parseFloat(order?.unit?.rentAmount) || 0 }}</h3>
+        </div>
+      </div>
+      </div>
+      
     </div>
     <div v-else class="user-details">
       <div><h2>Order History</h2></div>
       <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; "><p style="font-size: 3rem; margin-bottom: 5rem;">No orders found.</p></div>
-      
     </div>
   </div>
   
   
-    <!-- <div class="user-details">
-      <h2>Rented Properties</h2>
-      <div class="property-list">
-        <div class="property-card" v-for="property in user.rentedProperties" :key="property.id">
-          <img :src="property.image" alt="Property Image" />
-          <div>
-            <h3>{{ property.name }}</h3>
-            <p>Location: {{ property.location }}</p>
-            <p>Price: ₹{{ property.price }} per day</p>
-          </div>
-        </div>
-      </div>
-       -->
-      <!-- <h2>Order History</h2>
-      <ul>
-        <li v-for="order in user.orderHistory" :key="order.id">{{ order.details }}</li>
-      </ul>
 
-      <div class="rental-period-card">
-        <h3>Rental Period</h3>
-        <p>Start Date: {{ user.rentalPeriod.startDate }}</p>
-        <p>End Date: {{ user.rentalPeriod.endDate }}</p>
-      </div>
-    </div> -->
-  
 </template>
 
 <style scoped src="../css/UserProfile.css"></style>
