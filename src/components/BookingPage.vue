@@ -32,6 +32,10 @@ const id = route.params.id;
 const toast = useToast();
 onMounted(async() => {
 
+  if (!route.query?.fromHouseDetail) {
+    console.log("Received route state:", route.query);
+    router.push('/');
+  }
 const userData = JSON.parse(sessionStorage.getItem('tenant') || '{}');
 
 
@@ -83,7 +87,7 @@ const handleBooking= async()=>{
     });
     console.log(response.data);
     toast.success("Booking Successful");
-    router.push("/success");
+    router.push({ name: 'SuccessPage', query: { fromBookingPage: true } });
   } catch (error) {
     toast.error("Unable to accept the booking, Try Again!!")
   }

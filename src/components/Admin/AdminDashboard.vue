@@ -10,7 +10,7 @@
   </div>
         
       </div>
-    <div class="admin-dashboard" >
+    <div class="admin-dashboard-2" >
       <div class="sidebar"  >
         <h2>Admin Menu</h2>
         <ul>
@@ -37,7 +37,7 @@
             <p>{{ totalUsers }}</p>
           </div>
         </div>
-        <div class="listed-properties">
+        <!-- <div class="listed-properties">
           <h2>Listed Properties</h2>
           <div class="property-list">
             <div class="property-card" v-for="property in listedProperties" :key="property.id">
@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </template>
@@ -62,22 +62,22 @@
   const totalBooked = ref(5);
   const totalUsers = ref(25);
   
-  const listedProperties = ref([
-  {
-        id: 1,
-        name: "Green Shores",
-        location: "Nagaon, Alibaug",
-        price: 2500,
-        image: "https://www.villabalisale.com/uploads/images/property/2023-04-26-property-6448915ee5dca.jpg"
-      },
-      {
-        id: 2,
-        name: "LakeView Inn",
-        location: "Palghar",
-        price: 1500,
-        image: "https://i.pinimg.com/originals/11/4c/e9/114ce94d782662858157cbe701ed5ab3.jpg"
-      },
-  ]);
+  // const listedProperties = ref([
+  // {
+  //       id: 1,
+  //       name: "Green Shores",
+  //       location: "Nagaon, Alibaug",
+  //       price: 2500,
+  //       image: "https://www.villabalisale.com/uploads/images/property/2023-04-26-property-6448915ee5dca.jpg"
+  //     },
+  //     {
+  //       id: 2,
+  //       name: "LakeView Inn",
+  //       location: "Palghar",
+  //       price: 1500,
+  //       image: "https://i.pinimg.com/originals/11/4c/e9/114ce94d782662858157cbe701ed5ab3.jpg"
+  //     },
+  // ]);
   
 
 
@@ -89,36 +89,69 @@
     position: relative;
   }
   
+  .admin-dashboard-2{
+    display: flex;
+  }
+  
   .sidebar {
   width: 20%;
   background-color: #f8f9fa;
   padding: 2rem;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
   transition: width 0.3s;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
   
   .sidebar h2 {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: #333;
     margin-bottom: 2rem;
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
   }
   
   .sidebar ul {
     list-style-type: none;
     padding: 0;
+  
+  }
+  .sidebar ul li:hover {
+  transform: scale(1.1);
   }
   
   .sidebar ul li {
     margin-bottom: 1.5rem;
+    font-size: 2.5rem;
   }
   
   .sidebar ul li a {
     text-decoration: none;
-    color: #007bff;
-    font-size: 1rem;
+    color: #333;
+    font-size: 1.5rem;
+  }
+  .sidebar ul li a:hover {
+  transform: scale(1.1);
+}
+  
+  .main-content {
+    width: 80%;
+    padding: 2rem;
+    height: 70vh;
+    overflow-y: scroll;
   }
   
+  .main-content h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(to top left, #000080, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
   .main-content {
     width: 80%;
     padding: 2rem;
