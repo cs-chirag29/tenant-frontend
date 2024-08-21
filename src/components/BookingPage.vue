@@ -1,84 +1,99 @@
 <script setup>
 import axios from 'axios';
-// import { computed } from 'vue';
-import { ref, onMounted, computed,  } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import {useToast} from 'vue-toast-notification';
-
+import { useToast } from 'vue-toast-notification';
 
 const leaseInfo = ref({
-securityDeposit: '',
-startDate: '',
-endDate: '',
+  securityDeposit: '',
+  startDate: '',
+  endDate: '',
 });
 
 const userDetails = ref({
-tenantId:'',
-firstName: '',
-lastName: '',
-address: '',
-city: '',
-zipCode: '',
-phoneNumber: '',
-email: '',
+  tenantId: '',
+  firstName: '',
+  lastName: '',
+  address: '',
+  city: '',
+  zipCode: '',
+  phoneNumber: '',
+  email: '',
 });
 
 const unit = ref({});
-
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
-
 const toast = useToast();
-onMounted(async() => {
 
+// Define minimum security deposit (e.g., 10% of the rent amount or a fixed value)
+const minSecurityDeposit = computed(() => {
+  return unit.value.rentAmount * 0.1; // For example, 10% of the rent amount
+});
+
+const maxSecurityDeposit = computed(() => {
+  return unit.value.rentAmount * 0.5; // 50% of the rent amount
+});
+
+onMounted(async () => {
   if (!route.query?.fromHouseDetail) {
     console.log("Received route state:", route.query);
     router.push('/');
   }
-const userData = JSON.parse(sessionStorage.getItem('tenant') || '{}');
+  const userData = JSON.parse(sessionStorage.getItem('tenant') || '{}');
+  userDetails.value = { ...userDetails.value, ...userData };
+  const tenantId = userDetails.value.tenantId;
+  console.log(tenantId);
+  console.log(userDetails.value);
 
-
-userDetails.value = { ...userDetails.value, ...userData };
-const tenantId=userDetails.value.tenantId;
-console.log(tenantId);
-console.log(userDetails.value)
-
-try {
-  const response = await axios.get(`http://localhost:8080/units/${id}`)
-  unit.value=response.data;
-  console.log(unit.value);
-} catch (error) {
-  console.log(error);
-}
-
+  try {
+    const response = await axios.get(`http://localhost:8080/units/getUnitById/${id}`);
+    unit.value = response.data;
+    console.log(unit.value);
+  } catch (error) {
+    console.log(error);
+  }
 });
-
-// const ratePerDay = computed(() => unit.value.rentAmount / 30);
 
 const calculateTotalDays = (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
   const timeDiff = end - start;
-  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); 
-  return dayDiff+1;
+  const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  return dayDiff + 1;
 };
 
-const handleBooking= async()=>{
+const totalAmount = computed(() => {
+  if (unit.value.rentAmount && leaseInfo.value.startDate && leaseInfo.value.endDate) {
+    const days = calculateTotalDays(leaseInfo.value.startDate, leaseInfo.value.endDate);
+    return days * unit.value.rentAmount;
+  }
+  return 0;
+});
+
+const handleBooking = async () => {
   if (!leaseInfo.value.securityDeposit || !leaseInfo.value.startDate || !leaseInfo.value.endDate) {
     toast.error("Please fill in all lease details");
     return;
   }
-  try {  
 
-   console.log({
+  // Check if security deposit is within valid range
+  const securityDeposit = parseFloat(leaseInfo.value.securityDeposit);
+  if (isNaN(securityDeposit) || securityDeposit < minSecurityDeposit.value || securityDeposit > maxSecurityDeposit.value) {
+    toast.error(`Security Deposit must be between Rs ${minSecurityDeposit.value} and Rs ${maxSecurityDeposit.value}`);
+    return;
+  }
+
+  try {
+    console.log({
       tenantId: userDetails.value.tenantId,
       securityDeposit: leaseInfo.value.securityDeposit,
       startDate: leaseInfo.value.startDate,
       endDate: leaseInfo.value.endDate,
       unitId: unit.value.unitId,
     });
-    const response = await axios.post("http://localhost:8080/leases",{
+    const response = await axios.post("http://localhost:8080/leases", {
       tenantId: userDetails.value.tenantId,
       securityDeposit: leaseInfo.value.securityDeposit,
       startDate: leaseInfo.value.startDate,
@@ -89,17 +104,9 @@ const handleBooking= async()=>{
     toast.success("Booking Successful");
     router.push({ name: 'SuccessPage', query: { fromBookingPage: true } });
   } catch (error) {
-    toast.error("Unable to accept the booking, Try Again!!")
+    toast.error("Unable to accept the booking, Try Again!!");
   }
-  
 }
-const totalAmount = computed(() => {
-  if (unit.value.rentAmount && leaseInfo.value.startDate && leaseInfo.value.endDate) {
-    const days = calculateTotalDays(leaseInfo.value.startDate, leaseInfo.value.endDate);
-    return days * unit.value.rentAmount;
-  }
-  return 0;
-});
 </script>
 <template>
     <div>
@@ -229,11 +236,11 @@ const totalAmount = computed(() => {
             <h1>BOOKING DETAILS</h1>
             <img :src="unit.unitImage" alt="house" />
             <div class="booking-container-2-box">
-              <h2 v-if="unit.property" style="margin-top:-2rem; margin-left: 10rem;">{{ unit?.property?.propertyName }}</h2>
+              <h2 v-if="unit.property" style="border: none; margin-top:-2rem; margin-left: 0rem;">{{ unit?.property?.propertyName }}</h2>
               <h3 style="margin-top: -2rem;">Contract Start Date: {{ leaseInfo.startDate  }}</h3>
               <h3 style="margin-top: -1rem; margin-bottom: 2rem;">Contract End Date: {{ leaseInfo.endDate }}</h3>
-              <h2 style="margin-top: -2rem;">Rent: Rs {{ unit.rentAmount  }}/month </h2>
-              <h2 style="margin-top: -2rem;">Total: Rs {{totalAmount }}/month </h2>
+              <h2 style="margin-top: -2rem;">Rent: Rs {{ unit.rentAmount  }}/day </h2>
+              <h2 style="margin-top: -2rem;">Total: Rs {{totalAmount }} </h2>
               <span style="margin-top: -2rem;">(Excluding Security Deposit)</span>
             </div>
           </div>

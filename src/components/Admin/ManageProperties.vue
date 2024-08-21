@@ -8,7 +8,7 @@ const units = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:8080/units');
+    const response = await axios.get('http://localhost:8080/units/getAllUnits');
     units.value = response.data;
   } catch (error) {
     console.error('Error fetching units:', error);

@@ -1,52 +1,119 @@
 <script setup>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
-import {useToast} from 'vue-toast-notification';
+import { useToast } from 'vue-toast-notification';
 
 const toast = useToast();
 const users = ref([]);
-const selectedUserId = ref(null);
+const superAdminId = ref(null);
+const currentUser = ref(null);
 
 onMounted(async () => {
   try {
     const response = await axios.get('http://localhost:8080/tenants/getAllTenants');
     users.value = response.data;
+  
+    const adminUser = users.value.find(user => user.role === 'super-admin');
+    if (adminUser) {
+      superAdminId.value = adminUser.tenantId;
+    }
+
+    const currentUserData = sessionStorage.getItem("tenant");
+    if (currentUserData) {
+      currentUser.value = JSON.parse(currentUserData);
+    }
   } catch (error) {
     console.error('Error fetching users:', error);
+    toast.error('Error fetching users: ' + error.message);
   }
 });
 
-const handleRoleChange = (userId, role) => {
-  selectedUserId.value = userId;
-  const user = users.value.find(u => u.tenantId === userId);
-  if (user) {
-    user.role = role;
-  }
-};
+// const handleRoleChange = (user) => {
+//   if (user.tenantId === superAdminId.value) {
+//     toast.error("You cannot change the role of the super admin.");
+//     return;
+//   }
+
+//   if (user.role === 'super-admin') {
+//     toast.error("You cannot assign the super-admin role.");
+//     return;
+//   }
+
+//   if (user.role === 'admin' && currentUser.value.role === 'admin' && currentUser.value.tenantId === user.tenantId) {
+//     toast.error("You cannot change your own role.");
+//     return;
+//   }
+
+//   if (user.role === 'admin' && currentUser.value.role === 'admin') {
+//     toast.error("You cannot change the role of another admin.");
+//     return;
+//   }
+// };
 
 const updateRole = async (user) => {
+  const newuser = users.value.find(u=>u.tenantId===user.tenantId);
+  if (newuser.tenantId === superAdminId.value) {
+    toast.error("You cannot change the role of the super admin.");
+    return;
+  }
+
+  if (newuser.role === 'super-admin') {
+    toast.error("You cannot assign the super-admin role.");
+    return;
+  }
+
+  if (newuser.role === 'admin' && currentUser.value.role === 'admin' && currentUser.value.tenantId === newuser.tenantId) {
+    toast.error("You cannot change your own role.");
+    return;
+  }
+
+  if (newuser.role === 'user' && currentUser.value.role === 'admin') {
+    toast.error("You cannot change the role of another admin.");
+    return;
+  }
+  
+
   try {
-    await axios.put(`http://localhost:8080/tenants/${user.tenantId}`,  user);
-    toast.success("User Role changed Successfully")
+    await axios.put(`http://localhost:8080/tenants/${user.tenantId}`, user);
+    toast.success("User role changed successfully");
   } catch (error) {
-    toast.error('Error updating role:', error);
+    toast.error('Error updating role: ' + error.message);
   }
 };
 
 const deleteUser = async (userId) => {
+  if (userId === superAdminId.value) {
+    toast.error("You cannot delete the super admin.");
+    return;
+  }
+
+  const userToDelete = users.value.find(u => u.tenantId === userId);
+  if (userToDelete) {
+    if (currentUser.value.role === 'admin' && userToDelete.role === 'admin') {
+      toast.error("Admins cannot delete each other.");
+      return;
+    }
+    if (currentUser.value.role === 'admin' && currentUser.value.tenantId === userId) {
+      toast.error("Admins cannot delete themselves.");
+      return;
+    }
+    if (currentUser.value.role === 'user') {
+      toast.error("Users cannot delete other users or admins.");
+      return;
+    }
+  }
+
   try {
     await axios.delete(`http://localhost:8080/api/user-logins/${userId}`);
-    users.value = users.value.filter(user => user.tenantId !== userId);
-
     await axios.delete(`http://localhost:8080/tenants/${userId}`);
-    toast.success("User Deleted Successfully")
+    users.value = users.value.filter(user => user.tenantId !== userId);
+    toast.success("User deleted successfully");
   } catch (error) {
-    toast.success("Error while deleting user")
+    toast.error('Error deleting user: ' + error.message);
   }
 };
 </script>
 
-  
 <template>
   <div class="admin-dashboard">
     <div class="header">
@@ -76,21 +143,26 @@ const deleteUser = async (userId) => {
             </div>
             <h3>{{ user.email }}</h3>
             <h3>{{ user.phoneNumber }}</h3>
-            <select v-model="user.role" @change="handleRoleChange(user.tenantId, user.role)">
+            <select 
+              v-model="user.role" 
+           
+              :disabled="user.tenantId === superAdminId.value"
+            >
+              <option value="super-admin">Super Admin</option>
               <option value="user">User</option>
               <option value="admin">Admin</option>
             </select>
             <button 
               :id="`delete-button-${user.tenantId}`"
               @click="deleteUser(user.tenantId)"
+              :disabled="user.tenantId === superAdminId.value"
               style="cursor: pointer;"
             >
               <img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/FA5252/filled-trash.png" alt="filled-trash"/>
             </button>
             <button 
-            class="update-button"
+              class="update-button"
               :id="`update-button-${user.tenantId}`" 
-              
               @click="updateRole(user)"
             >
               Update
@@ -101,6 +173,7 @@ const deleteUser = async (userId) => {
     </div>
   </div>
 </template>
+
 
   
   <style scoped>

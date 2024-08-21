@@ -1,62 +1,80 @@
 <script setup>
-  import { ref} from "vue"
-  import axios from "axios";
-  import HeaderPage from "./HeaderPage.vue";
-  import { useRouter } from 'vue-router'; 
-  import LoaderPage from "./Utils/LoaderPage.vue";
-  import {useToast} from 'vue-toast-notification';
+import { ref } from "vue";
+import axios from "axios";
+import HeaderPage from "./HeaderPage.vue";
+import { useRouter } from 'vue-router'; 
+import LoaderPage from "./Utils/LoaderPage.vue";
+import { useToast } from 'vue-toast-notification';
 
-  const user = ref(  {
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        address: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        userName: '',
-        password: ''
-      })
+const user = ref({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  address: '',
+  city: '',
+  state: '',
+  zipCode: '',
+  userName: '',
+  password: ''
+});
 
-      const loading= ref(false);
-      const router = useRouter(); 
-      const toast = useToast();
-    // const  errors= ref({});
-    
-    // const  validateForm=() =>{
-    //     this.errors = {};
-    //     if (!this.loginData.name) this.errors.name = true;
-    //     if (!this.loginData.email || !this.validEmail(this.loginData.email)) this.errors.email = true;
-    //     if (!this.loginData.username) this.errors.username = true;
-    //     if (!this.loginData.password) this.errors.password = true;
-    //   }
+const loading = ref(false);
+const router = useRouter(); 
+const toast = useToast();
 
- 
+const validateForm = () => {
+  const errors = {};
+  if (!user.value.firstName) errors.firstName = "First name is required.";
+  if (!user.value.lastName) errors.lastName = "Last name is required.";
+  if (!user.value.email) errors.email = "Email is required.";
+  if (!user.value.phoneNumber) errors.phoneNumber = "Phone number is required.";
+  if (!user.value.address) errors.address = "Address is required.";
+  if (!user.value.city) errors.city = "City is required.";
+  if (!user.value.state) errors.state = "State is required.";
+  if (!user.value.zipCode) errors.zipCode = "ZIP Code is required.";
+  if (!user.value.userName) errors.userName = "Username is required.";
+  if (!user.value.password) errors.password = "Password is required.";
 
-  const onSubmit = async () => {
-    loading.value = true; 
+  return errors;
+};
+
+const onSubmit = async () => {
+  loading.value = true; 
+  const errors = validateForm();
+
+  if (Object.keys(errors).length > 0) {
+    Object.values(errors).forEach(error => toast.error(error));
+    loading.value = false;
+    return;
+  }
+
   try {
-    const response = await axios.post('http://localhost:8080/tenants', user.value); 
-    
+    const response = await axios.post('http://localhost:8080/tenants/register', user.value);
     sessionStorage.setItem('authToken', response.data); 
     toast.success('User registered successfully!');
-    
-   
-      router.push('/login');
-   
+    router.push('/login');
   } catch (error) {
-    toast.error('There was an error creating the user.');
-    console.error('There was an error creating the user:', error);
+     if (error.response.data.zipCode ) {
+      const errorMessage = error.response.data.zipCode;
+      toast.error(errorMessage);
+    }
+   else if (error.response) {
+      const errorMessage = error.response.data.message || 'An error occurred. Please try again.';
+      toast.error(errorMessage);
+    }
+     else if (error.request) {
+      toast.error('Network error: Please try again later.');
+    } else {
+      toast.error(`Error: ${error.message}`);
+    }
   } finally {
-   
-      loading.value = false;
-   
+    loading.value = false;
   }
-}
+};
+</script>
 
-    
-  </script>
+
 <template>  
   <HeaderPage></HeaderPage>
   <LoaderPage v-if="loading.value" />

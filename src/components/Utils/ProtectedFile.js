@@ -17,5 +17,5 @@ export function isAuthenticated() {
 
 export function isAdmin() {
   const tenant = getUser();
-  return tenant && tenant?.role === 'admin';
+  return tenant && (tenant?.role === 'admin' || tenant.role==='super-admin');
 }
