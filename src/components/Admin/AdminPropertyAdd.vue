@@ -1,8 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { ref } from 'vue';
-import {useToast} from 'vue-toast-notification';
-
+import { useToast } from 'vue-toast-notification';
 
 const property = ref({
     propertyName: '',
@@ -10,7 +9,7 @@ const property = ref({
     city: '',
     zipCode: '',
     state: '',
-    description:''
+    description: ''
 });
 
 const unit = ref({
@@ -21,17 +20,16 @@ const unit = ref({
   status: ''
 });
 
-
 const toast = useToast();
-
 
 const statuses = ['Available', 'Not Available'];
 
 const onSubmit = async () => {
   console.log('Submitting data:', property.value);
-  
+
   try {
-     const propertyResponse = await axios.post('http://localhost:8080/properties', property.value, {
+    
+    const propertyResponse = await axios.post('http://localhost:8080/properties', property.value, {
       headers: {
         'Content-Type': 'application/json'  
       }
@@ -39,40 +37,63 @@ const onSubmit = async () => {
 
     const propertyId = propertyResponse.data.propertyId;
     console.log('Property ID:', propertyId);
-   
+
+    
     const unitData = {
-    ...unit.value,
-    propertyId: propertyId ,
-    rentAmount: parseFloat(unit.value.rentAmount)
-  };
-  console.log(unitData);
-  
+      ...unit.value,
+      propertyId: propertyId,
+      rentAmount: parseFloat(unit.value.rentAmount)
+    };
+    console.log(unitData);
+
     const unitResponse = await axios.post('http://localhost:8080/units', unitData);
 
-    console.log(unitResponse.unitId);
-    toast.success("Data Added successfully");
-  
+    console.log(unitResponse.data.unitId);
+    toast.success("Data added successfully");
+
+   
     property.value = {
-            propertyName: '',
-            address: '',
-            city: '',
-            zipCode: '',
-            state: '',
-            description:'',
-        };
-        unit.value = {
-            unitNumber: '',
-            unitType: '', 
-            unitImage: '', 
-            rentAmount: '',
-            status: ''
-        };
+      propertyName: '',
+      address: '',
+      city: '',
+      zipCode: '',
+      state: '',
+      description: ''
+    };
+    unit.value = {
+      unitNumber: '',
+      unitType: '', 
+      unitImage: '', 
+      rentAmount: '',
+      status: ''
+    };
 
   } catch (error) {
     console.error('Error submitting form:', error);
+
+   if (error.response) {
+      const errorMessage =  'An error occurred. Please try again.';
+
+     toast.error(errorMessage);
+    }
+   else  if (error.response.data.zipCode) {
+      const errorMessage = error.response.data.zipCode || 'An error occurred. Please try again.';
+
+     toast.error(errorMessage);
+    }
+    else if (error.response.data.unitNumber) {
+      const errorMessage = error.response.data.unitNumber || 'An error occurred. Please try again.';
+
+     toast.error(errorMessage);
+    }
+      else {
+     
+      toast.error(`Error: ${error.message}`);
+    }
   }
 };
 </script>
+
 
 <template>
   <div class="header">
@@ -167,7 +188,7 @@ const onSubmit = async () => {
       </div> -->
 
 
-      <button type="submit">Add Lease</button>
+      <button type="submit">Add Unit</button>
     </form>
   </div>
 </template>

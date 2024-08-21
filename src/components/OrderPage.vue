@@ -11,7 +11,7 @@ const order = ref({});
 onMounted(async() => {
   const id = route.params.id;
   try {
-    const response = await axios.get(`http://localhost:8080/leases/${id}`);
+    const response = await axios.get(`http://localhost:8080/leases/getLeaseById/${id}`);
     order.value = response.data;
   } catch (error) {
     console.error('Error fetching lease details:', error);

@@ -25,7 +25,7 @@ onMounted(async () => {
   }
 
   try {
-    const response = await axios.get("http://localhost:8080/leases");
+    const response = await axios.get("http://localhost:8080/leases/getAllLeases");
     orders.value = response.data.filter(order => order.tenant.tenantId === tenantId.value);
   } catch (error) {
     console.log(error);
@@ -94,7 +94,7 @@ const handleadmin=()=>{
                 <button @click="goToEditProfile">Edit Profile</button>
                 <button style="margin-left: 2rem;" @click="handlelogout">Logout</button>
               </div>
-              <div style="margin-top: 2rem;"><button v-if="user.role === 'admin'" @click="handleadmin">Admin Dashboard</button></div>
+              <div style="margin-top: 2rem;"><button v-if="user.role === 'admin' || user.role==='super-admin'" @click="handleadmin">Admin Dashboard</button></div>
               
     </div>
 

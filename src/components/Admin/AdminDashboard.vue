@@ -1,3 +1,28 @@
+<script setup>
+  import axios from 'axios';
+import { onMounted, ref } from 'vue';
+  
+const totalListed = ref([]);
+  const totalBooked = ref([]);
+  const totalUsers = ref([]);
+  const loggeduser = ref({});
+  
+   onMounted(async()=>{
+    const userData = await axios.get("http://localhost:8080/tenants/getAllTenants")
+    totalUsers.value=userData.data;
+
+    const orderData = await axios.get("http://localhost:8080/leases/getAllLeases")
+    totalBooked.value=orderData.data;
+
+    const unitData = await axios.get("http://localhost:8080/units/getAllUnits")
+    totalListed.value=unitData.data;
+
+     loggeduser.value = JSON.parse(sessionStorage.getItem("tenant"));
+
+   })
+  
+  
+  </script>
 <template>
   
 
@@ -22,66 +47,26 @@
       </div>
       
       <div class="main-content">
-        <h1>Welcome, Admin</h1>
+        <h1>Welcome, {{ loggeduser.firstName }}{{' '}}{{ loggeduser.lastName }}</h1>
         <div class="stats">
           <div class="card">
-            <h3>Total Listed Properties</h3>
-            <p>{{ totalListed }}</p>
+            <h3 style="font-size: 1.5rem;">Total Listed Properties</h3>
+            <p style="font-size: 2rem;">{{ totalListed.length }}</p>
           </div>
           <div class="card">
-            <h3>Total Booked Properties</h3>
-            <p>{{ totalBooked }}</p>
+            <h3 style="font-size: 1.5rem;">Total Booked Properties</h3>
+            <p style="font-size: 2rem;">{{ totalBooked.length }}</p>
           </div>
           <div class="card">
-            <h3>Total Users</h3>
-            <p>{{ totalUsers }}</p>
+            <h3 style="font-size: 1.5rem;">Total Users</h3>
+            <p style="font-size: 2rem;">{{ totalUsers.length }}</p>
           </div>
         </div>
-        <!-- <div class="listed-properties">
-          <h2>Listed Properties</h2>
-          <div class="property-list">
-            <div class="property-card" v-for="property in listedProperties" :key="property.id">
-              <img :src="property.image" alt="Property Image" />
-              <div>
-                <h3>{{ property.name }}</h3>
-                <p>Location: {{ property.location }}</p>
-                <p>Price: ₹{{ property.price }} per day</p>
-              </div>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </template>
   
-  <script setup>
-  import { ref } from 'vue';
   
-  // Mock data for now
-  const totalListed = ref(10);
-  const totalBooked = ref(5);
-  const totalUsers = ref(25);
-  
-  // const listedProperties = ref([
-  // {
-  //       id: 1,
-  //       name: "Green Shores",
-  //       location: "Nagaon, Alibaug",
-  //       price: 2500,
-  //       image: "https://www.villabalisale.com/uploads/images/property/2023-04-26-property-6448915ee5dca.jpg"
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "LakeView Inn",
-  //       location: "Palghar",
-  //       price: 1500,
-  //       image: "https://i.pinimg.com/originals/11/4c/e9/114ce94d782662858157cbe701ed5ab3.jpg"
-  //     },
-  // ]);
-  
-
-
-  </script>
   
   <style scoped>
   .admin-dashboard {
@@ -166,6 +151,9 @@
   .stats {
     display: flex;
     gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
   }
   
   .card {
@@ -173,7 +161,13 @@
     padding: 1rem;
     background-color: #e6f7ff;
     border-radius: 8px;
+    width: 20vw;
+    height: 20vh;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   

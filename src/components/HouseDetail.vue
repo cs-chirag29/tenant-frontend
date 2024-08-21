@@ -12,7 +12,7 @@ onMounted( async()=>{
 
   try {
     
-    const response = await axios.get(`http://localhost:8080/units/${houseId}`);
+    const response = await axios.get(`http://localhost:8080/units/getUnitById/${houseId}`);
     house.value = response.data;
     console.log(house.value);
   } catch (error) {

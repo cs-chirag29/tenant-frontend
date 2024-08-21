@@ -10,7 +10,7 @@ const error = ref(null);
 
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/units'); 
+    const response = await axios.get('http://localhost:8080/units/getAllUnits'); 
     houses.value = response.data;
     console.log(houses.value);
   } catch (err) {

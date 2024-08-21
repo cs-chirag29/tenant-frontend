@@ -3,9 +3,13 @@ import HeaderPage from './HeaderPage.vue';
 import HomeOptions from './HomeOptions.vue';
 import ReviewsPage from './ReviewsPage.vue';
 import HelpPage from "./HelpPage.vue";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 
-
+const handlesubmit =()=>{
+  router.push("/allHouses");
+}
 
 </script>
 <template>
@@ -33,7 +37,7 @@ import HelpPage from "./HelpPage.vue";
             <label for="end-date">End Date:</label>
             <input type="date" id="end-date" name="end-date" required />
           </div>
-          <button type="submit">Book Now</button>
+          <button  @click="handlesubmit" type="submit">Book Now</button>
         </form>
       </div>
     </div>
